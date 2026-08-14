@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bodega Pro — A2K Digital Studio</title>
+<meta name="description" content="Bodega Pro — punto de venta, inventario, fiados y caja para bodegas y abastos. App Android de A2K Digital Studio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0d1c; --surface:#11162a; --surface-2:#1a2140; --border:#242c52;
+  --ink:#edf0ff; --ink-dim:#8b94c4;
+  --indigo:#3d4fe0; --indigo-dim:#2a38a8;
+  --lime:#c6ff00; --lime-dim:#9bcc00;
+  --shadow:rgba(0,0,0,0.6);
+  --font-hero:'Big Shoulders Display',ui-sans-serif,sans-serif;
+  --font-body:'Archivo',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--font-body); font-weight:400;
+  line-height:1.55; -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;}
+img,svg{display:block; max-width:100%;}
+.wrap{max-width:1060px; margin:0 auto; padding:0 28px;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+
+/* ── brand strip ─────────────────────────────────────────── */
+.brandstrip{display:flex; align-items:center; justify-content:space-between; padding:22px 0; border-bottom:1px solid var(--border); gap:16px;}
+.a2k-mark{display:flex; align-items:center; gap:9px;}
+.a2k-mark svg{width:26px; height:26px;}
+.a2k-mark .word{font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; color:var(--ink-dim); text-transform:uppercase;}
+.a2k-mark .word b{color:var(--ink); font-weight:500;}
+/* mini barcode con lectura en curso — motivo propio de Bodega Pro */
+.minicode{
+  position:relative; width:78px; height:22px; overflow:hidden; border-radius:2px;
+  background-image:repeating-linear-gradient(90deg,
+    var(--ink-dim) 0 2px, transparent 2px 5px,
+    var(--ink-dim) 5px 6px, transparent 6px 10px,
+    var(--ink-dim) 10px 13px, transparent 13px 15px,
+    var(--ink-dim) 15px 16px, transparent 16px 21px);
+  opacity:0.8;
+}
+.minicode::after{
+  content:''; position:absolute; top:0; bottom:0; width:12px;
+  background:linear-gradient(90deg, transparent, var(--lime), transparent);
+  animation:sweep 2.6s cubic-bezier(.55,0,.45,1) infinite;
+}
+@keyframes sweep{0%{transform:translateX(-14px);}100%{transform:translateX(80px);}}
+.livepulse{display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.1em; white-space:nowrap;}
+.livepulse .dot{width:7px; height:7px; border-radius:50%; background:var(--lime); animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* ── hero ─────────────────────────────────────────────────── */
+.hero{padding:70px 0 46px; display:grid; grid-template-columns:1.25fr 0.75fr; gap:46px; align-items:center;}
+.eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:0.16em; color:var(--lime); text-transform:uppercase; margin:0 0 16px; display:flex; align-items:center; gap:10px;}
+.eyebrow::before{content:''; width:22px; height:1px; background:var(--lime);}
+h1{
+  font-family:var(--font-hero); font-weight:800; text-transform:uppercase;
+  font-size:clamp(58px, 10vw, 108px); line-height:0.88; margin:0 0 22px;
+  letter-spacing:0.005em; text-wrap:balance; color:var(--ink);
+}
+h1 em{font-style:normal; color:var(--lime);}
+.sub{font-size:19px; color:var(--ink-dim); max-width:520px; margin:0 0 30px;}
+.sub b{color:var(--ink); font-weight:600;}
+.hero-actions{display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+
+/* escáner: el motivo principal — línea de lectura sobre el código */
+.scanner{
+  position:relative; background:var(--surface); border:1px solid var(--border);
+  border-radius:12px; padding:26px 22px 18px; box-shadow:0 24px 60px -34px var(--shadow);
+  overflow:hidden;
+}
+.scanner .tag{font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.14em; color:var(--ink-dim); text-transform:uppercase; margin-bottom:14px;}
+.codebox{position:relative; height:104px; border-radius:6px; background:#f4f6ff; overflow:hidden; padding:12px 14px;}
+.bars{
+  height:100%;
+  background-image:repeating-linear-gradient(90deg,
+    #0a0d1c 0 3px, transparent 3px 7px,
+    #0a0d1c 7px 9px, transparent 9px 15px,
+    #0a0d1c 15px 20px, transparent 20px 23px,
+    #0a0d1c 23px 25px, transparent 25px 31px,
+    #0a0d1c 31px 37px, transparent 37px 41px);
+}
+.codebox .beam{
+  position:absolute; left:0; right:0; height:3px; top:0;
+  background:var(--lime); box-shadow:0 0 14px 3px rgba(198,255,0,0.75);
+  animation:scan 3.4s cubic-bezier(.45,0,.55,1) infinite alternate;
+}
+@keyframes scan{0%{top:6px;}100%{top:94px;}}
+.scanner .readout{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11.5px; color:var(--ink-dim); margin-top:14px; gap:10px;}
+.scanner .readout b{color:var(--lime); font-weight:500;}
+
+.btn-primary{
+  font-family:var(--font-body); font-weight:700; font-size:16px;
+  background:linear-gradient(135deg, var(--lime), var(--lime-dim));
+  color:#0a0d1c; border:none; padding:16px 30px; border-radius:8px;
+  cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:10px;
+  box-shadow:0 10px 28px -12px rgba(198,255,0,0.4); transition:transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-primary:hover{transform:translateY(-2px); box-shadow:0 16px 34px -12px rgba(198,255,0,0.5);}
+.btn-primary:active{transform:translateY(0);}
+.btn-primary:focus-visible{outline:2px solid var(--lime); outline-offset:3px;}
+.btn-secondary{
+  font-family:var(--font-body); font-weight:600; font-size:16px;
+  background:transparent; color:var(--ink); border:1px solid var(--indigo);
+  padding:15px 30px; border-radius:8px; cursor:pointer; text-decoration:none;
+  display:inline-flex; align-items:center; gap:10px; transition:background 0.15s ease, border-color 0.15s ease;
+}
+.btn-secondary:hover{background:rgba(61,79,224,0.16); border-color:var(--lime);}
+.btn-secondary:focus-visible{outline:2px solid var(--lime); outline-offset:3px;}
+.meta-line{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-dim);}
+.meta-line span{color:var(--ink);}
+
+/* riel de carga: separador con movimiento */
+.railbar{height:8px; border-radius:4px; overflow:hidden; margin:10px 0 0;
+  background:repeating-linear-gradient(115deg, var(--indigo) 0 12px, var(--surface-2) 12px 24px);
+  background-size:48px 48px; animation:roll 2.4s linear infinite; opacity:0.75;}
+@keyframes roll{from{background-position:0 0;}to{background-position:48px 0;}}
+
+/* ── manifiesto / descarga ───────────────────────────────── */
+.slip-section{padding:52px 0 66px;}
+.slip{background:var(--surface); border:1px solid var(--border); border-radius:14px; box-shadow:0 24px 60px -30px var(--shadow); overflow:hidden;}
+.slip-head{
+  display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap;
+  padding:14px 26px; background:var(--surface-2); border-bottom:1px solid var(--border);
+  font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-dim);
+}
+.slip-head b{color:var(--lime); font-weight:500;}
+.slip-body{display:grid; grid-template-columns:1.2fr 1px 1fr;}
+.slip-rule{background:var(--border);}
+.slip-left,.slip-right{padding:32px 30px;}
+.slip-left h2,.slip-right h2{font-family:var(--font-hero); font-weight:700; text-transform:uppercase; font-size:27px; letter-spacing:0.01em; margin:0 0 20px; line-height:1;}
+.steps{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:16px;}
+.steps li{display:grid; grid-template-columns:34px 1fr; gap:14px; align-items:baseline;}
+.steps .n{font-family:var(--font-mono); font-size:13px; color:var(--lime); font-weight:700;}
+.steps p{margin:0; font-size:14.5px; color:var(--ink-dim);}
+.steps p b{color:var(--ink); font-weight:600;}
+.note{margin-top:22px; padding:12px 14px; background:var(--surface-2); border-left:2px solid var(--indigo); border-radius:0 6px 6px 0; font-size:12.5px; color:var(--ink-dim); font-family:var(--font-mono); line-height:1.6;}
+.slip-right{display:flex; flex-direction:column; gap:14px; background:var(--surface-2);}
+.pricebadge{font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.1em; color:var(--ink-dim); text-transform:uppercase;}
+.pricebadge b{display:block; font-family:var(--font-hero); font-weight:800; text-transform:uppercase; font-size:34px; color:var(--lime); letter-spacing:0.01em; margin-top:2px; line-height:1;}
+.filerow{display:flex; justify-content:space-between; gap:12px; width:100%; font-family:var(--font-mono); font-size:12.5px; color:var(--ink-dim); border-top:1px dashed var(--border); padding-top:11px;}
+.filerow span:last-child{color:var(--ink);}
+.labelcode{margin-top:6px; height:34px; border-radius:3px; opacity:0.55;
+  background-image:repeating-linear-gradient(90deg,
+    var(--ink) 0 2px, transparent 2px 6px,
+    var(--ink) 6px 9px, transparent 9px 11px,
+    var(--ink) 11px 12px, transparent 12px 17px);}
+
+/* ── estantería de módulos ───────────────────────────────── */
+.rack-section{padding:6px 0 72px;}
+.rack-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:26px; flex-wrap:wrap; gap:10px;}
+.rack-head h2{font-family:var(--font-hero); font-weight:800; text-transform:uppercase; font-size:38px; letter-spacing:0.01em; margin:0; line-height:1;}
+.rack-head .count{font-family:var(--font-mono); font-size:12.5px; color:var(--ink-dim);}
+.rack{display:grid; grid-template-columns:repeat(2, 1fr); gap:18px 20px;}
+.crate{
+  position:relative; background:var(--surface); border:1px solid var(--border);
+  border-bottom:3px solid var(--indigo-dim); border-radius:8px; padding:18px 20px 16px;
+  transition:border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+}
+.crate:hover{transform:translateY(-3px); background:var(--surface-2); border-bottom-color:var(--lime);}
+.crate .sku{font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.12em; color:var(--lime); text-transform:uppercase; display:block; margin-bottom:7px;}
+.crate .name{font-family:var(--font-hero); font-weight:700; text-transform:uppercase; font-size:23px; letter-spacing:0.01em; line-height:1.05; display:block; margin-bottom:6px;}
+.crate .desc{font-size:13.5px; color:var(--ink-dim); margin:0;}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr; gap:34px; padding-top:52px;}
+  .slip-body{grid-template-columns:1fr;}
+  .slip-rule{display:none;}
+}
+@media (max-width:600px){
+  .rack{grid-template-columns:1fr;}
+  .minicode{display:none;}
+}
+
+/* ── footer ───────────────────────────────────────────────── */
+footer{border-top:1px solid var(--border); padding:38px 0 48px;}
+.foot-grid{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;}
+.foot-left{display:flex; align-items:center; gap:12px;}
+.foot-left svg{width:30px; height:30px;}
+.foot-left .txt{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-dim); line-height:1.5;}
+.foot-left .txt b{color:var(--ink); font-weight:500; letter-spacing:0.04em;}
+.foot-right{font-family:var(--font-mono); font-size:12px; color:var(--ink-dim); text-align:right; line-height:1.8;}
+.foot-right a{color:var(--lime); text-decoration:none; border-bottom:1px solid transparent;}
+.foot-right a:hover{border-bottom-color:var(--lime);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brandstrip">
+    <div class="a2k-mark">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16 4 L27 26 H21 L16 15 L11 26 H5 Z" style="fill:var(--indigo)"/></svg>
+      <span class="word"><b>A2K</b> DIGITAL STUDIO</span>
+    </div>
+    <div class="minicode" aria-hidden="true"></div>
+    <div class="livepulse"><span class="dot"></span> Sistema activo</div>
+  </div>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Punto de venta para bodegas y abastos</p>
+      <h1>Bodega <em>Pro</em></h1>
+      <p class="sub">Mostrador, inventario, fiados y cierre de caja en <b>un solo teléfono</b>. Sin computadora, sin mensualidad y sin depender de internet para vender.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="#descarga">↓ Descargar Bodega Pro</a>
+        <span class="meta-line">Android · <span>49 MB</span> · pide tu código demo gratis por WhatsApp</span>
+      </div>
+    </div>
+    <div class="scanner">
+      <div class="tag">Lector de inventario</div>
+      <div class="codebox">
+        <div class="bars" aria-hidden="true"></div>
+        <div class="beam" aria-hidden="true"></div>
+      </div>
+      <div class="readout"><span>SKU-BODEGA-001</span><b>EN STOCK</b></div>
+    </div>
+  </section>
+
+  <div class="railbar" aria-hidden="true"></div>
+
+  <section class="slip-section" id="descarga">
+    <div class="slip">
+      <div class="slip-head">
+        <span>Guía de instalación</span>
+        <span>Versión <b>1.0.0</b></span>
+      </div>
+      <div class="slip-body">
+        <div class="slip-left">
+          <h2>Cómo instalarla</h2>
+          <ol class="steps">
+            <li><span class="n">01</span><p>Escríbenos por WhatsApp y te mandamos tu código de licencia (demo o PRO).</p></li>
+            <li><span class="n">02</span><p>Toca <b>Descargar .apk</b> — el archivo baja directo a tu teléfono.</p></li>
+            <li><span class="n">03</span><p>Tu teléfono va a advertir que es de "una fuente desconocida" — es normal, toca <b>Configuración</b> y luego <b>Permitir</b>. Abre el archivo e toca <b>Instalar</b>.</p></li>
+            <li><span class="n">04</span><p>Abre Bodega Pro y escribe el código que te mandamos — la app se activa al instante.</p></li>
+          </ol>
+          <div class="note">El texto exacto del aviso de seguridad cambia un poco según la marca del teléfono (Samsung, Xiaomi, Infinix, etc.) — el paso siempre es el mismo: permitir esta instalación una vez.</div>
+        </div>
+        <div class="slip-rule" aria-hidden="true"></div>
+        <div class="slip-right">
+          <div class="pricebadge">Licencia<b>de por vida</b></div>
+          <a class="btn-primary" href="https://github.com/tiendadigitalaipro/bodegapro/releases/latest/download/bodegapro.apk">↓ Descargar .apk</a>
+          <a class="btn-secondary" href="https://wa.me/584164117331">💬 Pedir código por WhatsApp</a>
+          <div class="filerow"><span>Versión</span><span>1.0.0</span></div>
+          <div class="filerow"><span>Plataforma</span><span>Android 8+</span></div>
+          <div class="filerow"><span>Tamaño</span><span>49 MB</span></div>
+          <div class="labelcode" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rack-section">
+    <div class="rack-head">
+      <h2>Qué incluye</h2>
+      <span class="count">10 módulos</span>
+    </div>
+    <div class="rack">
+      <div class="crate"><span class="sku">MOD-01</span><span class="name">Dashboard</span><p class="desc">Ventas del día, tickets, stock bajo y fiados pendientes de un vistazo.</p></div>
+      <div class="crate"><span class="sku">MOD-02</span><span class="name">Punto de Venta</span><p class="desc">Cobra rápido en dólares o bolívares, con vuelto calculado al instante.</p></div>
+      <div class="crate"><span class="sku">MOD-03</span><span class="name">Inventario</span><p class="desc">Productos, costos, categorías y aviso automático de stock mínimo.</p></div>
+      <div class="crate"><span class="sku">MOD-04</span><span class="name">Historial</span><p class="desc">Cada venta guardada con su método de pago, tasa y detalle completo.</p></div>
+      <div class="crate"><span class="sku">MOD-05</span><span class="name">Devoluciones</span><p class="desc">Totales o parciales, con motivo y reingreso del producto a stock.</p></div>
+      <div class="crate"><span class="sku">MOD-06</span><span class="name">Caja</span><p class="desc">Apertura y cierre de turno, entradas, salidas y diferencia real.</p></div>
+      <div class="crate"><span class="sku">MOD-07</span><span class="name">Clientes / Fiados</span><p class="desc">Control de créditos con límite por cliente y abonos parciales.</p></div>
+      <div class="crate"><span class="sku">MOD-08</span><span class="name">Proveedores</span><p class="desc">Compras, deuda pendiente y pagos registrados por proveedor.</p></div>
+      <div class="crate"><span class="sku">MOD-09</span><span class="name">Reportes</span><p class="desc">Lo más vendido, ingresos por período y comportamiento de la caja.</p></div>
+      <div class="crate"><span class="sku">MOD-10</span><span class="name">Configuración</span><p class="desc">Datos del negocio, tasa del día y respaldo de tu información.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-grid">
+      <div class="foot-left">
+        <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M16 4 L27 26 H21 L16 15 L11 26 H5 Z" style="fill:var(--indigo)"/></svg>
+        <div class="txt"><b>A2K DIGITAL STUDIO</b><br>Sistemas de gestión para negocios</div>
+      </div>
+      <div class="foot-right">
+        ¿Dudas o quieres tu licencia?<br>
+        <a href="https://wa.me/584164117331">WhatsApp +58 416-4117331</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
