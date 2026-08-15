@@ -91,8 +91,8 @@ h1 em{font-style:normal; color:var(--lime);}
     #0a0d1c 31px 37px, transparent 37px 41px);
 }
 .codebox .beam{
-  position:absolute; left:0; right:0; height:3px; top:0;
-  background:var(--lime); box-shadow:0 0 14px 3px rgba(198,255,0,0.75);
+  position:absolute; left:0; right:0; height:2px; top:0;
+  background:var(--lime); box-shadow:0 1px 3px rgba(0,0,0,0.5);
   animation:scan 3.4s cubic-bezier(.45,0,.55,1) infinite alternate;
 }
 @keyframes scan{0%{top:6px;}100%{top:94px;}}
@@ -144,7 +144,8 @@ h1 em{font-style:normal; color:var(--lime);}
 .steps .n{font-family:var(--font-mono); font-size:13px; color:var(--lime); font-weight:700;}
 .steps p{margin:0; font-size:14.5px; color:var(--ink-dim);}
 .steps p b{color:var(--ink); font-weight:600;}
-.note{margin-top:22px; padding:12px 14px; background:var(--surface-2); border-left:2px solid var(--indigo); border-radius:0 6px 6px 0; font-size:12.5px; color:var(--ink-dim); font-family:var(--font-mono); line-height:1.6;}
+.note{margin-top:22px; padding:12px 14px; background:var(--surface-2); border:1px solid var(--border); border-radius:6px; font-size:12.5px; color:var(--ink-dim); font-family:var(--font-mono); line-height:1.6;}
+.note b{color:var(--lime); font-weight:600; letter-spacing:0.06em;}
 .slip-right{display:flex; flex-direction:column; gap:14px; background:var(--surface-2);}
 .pricebadge{font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.1em; color:var(--ink-dim); text-transform:uppercase;}
 .pricebadge b{display:block; font-family:var(--font-hero); font-weight:800; text-transform:uppercase; font-size:34px; color:var(--lime); letter-spacing:0.01em; margin-top:2px; line-height:1;}
@@ -164,10 +165,11 @@ h1 em{font-style:normal; color:var(--lime);}
 .rack{display:grid; grid-template-columns:repeat(2, 1fr); gap:18px 20px;}
 .crate{
   position:relative; background:var(--surface); border:1px solid var(--border);
-  border-bottom:3px solid var(--indigo-dim); border-radius:8px; padding:18px 20px 16px;
-  transition:border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  border-radius:8px; padding:18px 20px 16px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.02) inset;
+  transition:border-color 0.18s ease, transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
-.crate:hover{transform:translateY(-3px); background:var(--surface-2); border-bottom-color:var(--lime);}
+.crate:hover{transform:translateY(-3px); background:var(--surface-2); border-color:var(--indigo-dim); box-shadow:0 14px 28px -18px var(--shadow);}
 .crate .sku{font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.12em; color:var(--lime); text-transform:uppercase; display:block; margin-bottom:7px;}
 .crate .name{font-family:var(--font-hero); font-weight:700; text-transform:uppercase; font-size:23px; letter-spacing:0.01em; line-height:1.05; display:block; margin-bottom:6px;}
 .crate .desc{font-size:13.5px; color:var(--ink-dim); margin:0;}
@@ -232,7 +234,7 @@ footer{border-top:1px solid var(--border); padding:38px 0 48px;}
     <div class="slip">
       <div class="slip-head">
         <span>Guía de instalación</span>
-        <span>Versión <b>1.2.1</b></span>
+        <span>Versión <b>1.2.2</b></span>
       </div>
       <div class="slip-body">
         <div class="slip-left">
@@ -243,14 +245,14 @@ footer{border-top:1px solid var(--border); padding:38px 0 48px;}
             <li><span class="n">03</span><p>Tu teléfono va a advertir que es de "una fuente desconocida" — es normal, toca <b>Configuración</b> y luego <b>Permitir</b>. Abre el archivo e toca <b>Instalar</b>.</p></li>
             <li><span class="n">04</span><p>Abre Bodega Pro y escribe el código que te mandamos — la app se activa al instante.</p></li>
           </ol>
-          <div class="note">El texto exacto del aviso de seguridad cambia un poco según la marca del teléfono (Samsung, Xiaomi, Infinix, etc.) — el paso siempre es el mismo: permitir esta instalación una vez.</div>
+          <div class="note"><b>AVISO ·</b> El texto exacto del aviso de seguridad cambia un poco según la marca del teléfono (Samsung, Xiaomi, Infinix, etc.) — el paso siempre es el mismo: permitir esta instalación una vez.</div>
         </div>
         <div class="slip-rule" aria-hidden="true"></div>
         <div class="slip-right">
           <div class="pricebadge">Licencia<b>de por vida</b></div>
           <a class="btn-primary" href="https://github.com/tiendadigitalaipro/bodegapro/releases/latest/download/bodegapro.apk">↓ Descargar .apk</a>
           <a class="btn-secondary" href="https://wa.me/584164117331">💬 Pedir código por WhatsApp</a>
-          <div class="filerow"><span>Versión</span><span>1.2.1</span></div>
+          <div class="filerow"><span>Versión</span><span>1.2.2</span></div>
           <div class="filerow"><span>Plataforma</span><span>Android 8+</span></div>
           <div class="filerow"><span>Tamaño</span><span>50 MB</span></div>
           <div class="labelcode" aria-hidden="true"></div>
