@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/app_database.dart';
 import '../models/producto.dart';
+import '../services/analytics_service.dart';
 
 class ProductosController extends ChangeNotifier {
   final List<Producto> productos = [];
@@ -40,6 +41,7 @@ class ProductosController extends ChangeNotifier {
     productos.add(conId);
     await _guardar();
     notifyListeners();
+    AnalyticsService.track('producto_agregado', {'es_primer_producto': productos.length == 1});
     return conId;
   }
 

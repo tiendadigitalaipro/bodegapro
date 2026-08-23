@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../data/app_database.dart';
+import '../../services/analytics_service.dart';
 import '../../theme/app_theme.dart';
 
 class _Slide {
@@ -43,6 +46,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   Future<void> _terminar() async {
     await AppDatabase.setBool('onboarding_visto', true);
+    unawaited(AnalyticsService.track('onboarding_completado', {'ultima_pagina_vista': _pagina}));
     if (mounted) widget.onFinish();
   }
 

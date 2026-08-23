@@ -4,6 +4,7 @@ import 'data/app_database.dart';
 import 'screens/home_shell.dart';
 import 'screens/licencia/licencia_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
+import 'services/analytics_service.dart';
 import 'state/avances_controller.dart';
 import 'state/caja_controller.dart';
 import 'state/cart_controller.dart';
@@ -16,7 +17,9 @@ import 'state/proveedores_controller.dart';
 import 'theme/app_theme.dart';
 import 'widgets/app_splash_skeleton.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AnalyticsService.init();
   runApp(const BodegaProApp());
 }
 

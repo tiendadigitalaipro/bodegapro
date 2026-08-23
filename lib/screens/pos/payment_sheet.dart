@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/cliente.dart';
 import '../../models/metodo_pago.dart';
 import '../../models/pago_parcial.dart';
+import '../../services/analytics_service.dart';
 import '../../state/cart_controller.dart';
 import '../../state/clientes_controller.dart';
 import '../../state/productos_controller.dart';
@@ -149,6 +150,13 @@ class _PaymentSheetState extends State<PaymentSheet> {
       } else if (montoFiadoMixto > 0) {
         await clientes.registrarFiado(_clienteId!, montoFiadoMixto);
       }
+      AnalyticsService.track('venta_registrada', {
+        'metodo_pago': metodo.nombre,
+        'total_usd': venta.totalUsd,
+        'cantidad_items': items.length,
+        'es_fiado': esFiado || montoFiadoMixto > 0,
+        'es_mixto': esMixto,
+      });
       if (!mounted) return;
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('✅ Venta registrada'), backgroundColor: Colors.green.shade700));
